@@ -1,0 +1,57 @@
+var attack_mode=true
+
+
+
+setInterval(function(){
+
+
+
+
+
+
+
+        if(character.items[0].q<10)
+    {buy("hpot1",1);}
+
+
+    if(character.items[1].q<10)
+    {buy("mpot0",1);}
+if(character.hp<150)
+
+{parent.socket.emit("transport",{to:"main"});}
+if(character.hp<character.max_hp-200 || character.mp<character.max_mp-300) use_hp_or_mp();
+    loot();
+
+    if(!attack_mode || character.moving) return;
+
+    var target=get_targeted_monster();
+    if(!target)
+    {
+        target=get_nearest_monster({min_xp:2100,max_att:90});
+
+if(!target){
+    target=get_nearest_monster({min_xp:100,max_att:80});}
+        if(target) change_target(target);
+        else
+        {
+            set_message("No Monsters");
+            return;
+        }
+    }
+
+    if(!in_attack_range(target))
+    {
+        move(
+            character.real_x+(target.real_x-character.real_x)/2,
+            character.real_y+(target.real_y-character.real_y)/2
+            );
+        // Walk half the distance
+    }
+    else if(can_attack(target),character.hp>character.max_hp-400)
+    {
+        set_message("Attacking");
+        attack(target);
+    }
+
+
+},1000/4);
