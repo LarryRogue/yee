@@ -1,0 +1,54 @@
+var attack_mode=true
+
+
+
+setInterval(function(){
+
+
+
+
+
+
+
+        if(character.items[0].q<10)
+    {buy("hpot0",1);}
+
+
+    if(character.items[1].q<10)
+    {buy("mpot0",1);}
+if(character.hp<100)
+
+{parent.socket.emit("transport",{to:"main"});}
+if(character.hp<character.max_hp-200 || character.mp<character.max_mp-300) use_hp_or_mp();
+    loot();
+
+    if(!attack_mode || character.moving) return;
+
+    var target=get_target();
+    if(!target)
+    {target = get_target_of(get_player(character.party));   }
+    if(!target){   target = get_player(character.party),move(
+        character.real_x+(target.real_x-character.real_x)/2,
+        character.real_y+(target.real_y-character.real_y)/2
+        );
+        set_message("Not in Party.");
+        return;
+ 
+    }
+
+    if(!in_attack_range(target))
+    {
+        move(
+            character.real_x+(target.real_x-character.real_x)/2,
+            character.real_y+(target.real_y-character.real_y)/2
+            );
+        // Walk half the distance
+    }
+    else if(can_attack(target))
+    {
+        set_message("Attacking");
+        attack(target);
+    }
+
+
+},1000/4);
